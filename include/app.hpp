@@ -11,6 +11,8 @@ class App
 public:
 	void Run();
 	glm::vec2 GetMouseWorldPosition();
+	bool IsLeftMouseButtonDown();
+	bool IsRightMouseButtonDown();
 
 private:
 	int m_width = 512;

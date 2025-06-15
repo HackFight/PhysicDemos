@@ -98,3 +98,15 @@ glm::vec2 App::GetMouseWorldPosition()
 
 	return glm::vec2(xpos, ypos);
 }
+
+bool App::IsLeftMouseButtonDown()
+{
+	if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT)) return true;
+	else return false;
+}
+
+bool App::IsRightMouseButtonDown()
+{
+	if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT)) return true;
+	else return false;
+}

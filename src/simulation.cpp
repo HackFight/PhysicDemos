@@ -5,10 +5,24 @@
 void Simulation::Init(App* app)
 {
 	m_app = app;
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 5; i++)
 	{
-		Body temp(1.0f, 1.0f, glm::vec2((i - 5.0f)*5, 0.0f));
+		Body temp(1.0f, 1.0f, glm::vec2((i - 0.5f)*5, 0.0f));
 		bodies.push_back(temp);
+	}
+
+	for (int i = 0; i < bodies.size(); i++)
+	{
+		if (i == bodies.size() - 1)
+		{
+			Constraint temp(&bodies.at(i), &bodies.at(0));
+			constraints.push_back(temp);
+		}
+		else
+		{
+			Constraint temp(&bodies.at(i), &bodies.at(i+1));
+			constraints.push_back(temp);
+		}
 	}
 }
 
@@ -26,18 +40,11 @@ void Simulation::Cleanup()
 
 void Simulation::ApplyAccelerations(float dt)
 {
-	glm::vec2 toMouse;
-
 	for (int i = 0; i < bodies.size(); i++)
 	{
 		Body& body = bodies.at(i);
 
-		if (i == 0)
-		{
-			toMouse = glm::normalize(m_app->GetMouseWorldPosition() - body.position);
-			body.Accelerate(toMouse * 2000.0f);
-		}
-		body.Accelerate(gravity);
+		body.Accelerate(body.GetVelocity() * -1000.0f);
 	}
 }
 
@@ -62,13 +69,27 @@ void Simulation::ApplyConstraints(float dt)
 	for (int i = 0; i < bodies.size(); i++)
 	{
 		Body& body = bodies.at(i);
+
+		//Springs
+		for (int i = 0; i < constraints.size(); i++)
+		{
+			constraints.at(i).Satisfy();
+		}
 		
+		//Stay in bound
 		float dist = glm::length(body.position);
-		
 		if (dist > radius)
 		{
 			glm::vec2 n = glm::normalize(body.position);
 			body.position -= body.position - n * radius;
+		}
+
+		//Mouse
+		if (i == 0 && m_app->IsLeftMouseButtonDown())
+		{
+			body.position = m_app->GetMouseWorldPosition();
+			body.SetVelocity(glm::vec2(0.0f), dt);
+			body.acceleration = glm::vec2(0.0f);
 		}
 	}
 }

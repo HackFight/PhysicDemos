@@ -1,8 +1,9 @@
 #pragma once
 #include <glm/glm.hpp>
 
-struct Body
+class Body
 {
+public:
 	float radius;
 	float mass;
 	glm::vec2 lastPosition;

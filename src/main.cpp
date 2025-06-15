@@ -1,6 +1,7 @@
 #include "app.hpp"
 
-int main() {
+int main()
+{
     App app;
     app.Run();
     return 0;

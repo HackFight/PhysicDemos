@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "body.hpp"
+#include "constraint.hpp"
 
 class App;
 
@@ -14,6 +15,7 @@ public:
 
 	//Particle
 	std::vector<Body> bodies;
+	std::vector<Constraint> constraints;
 
 	glm::vec2 gravity = glm::vec2(0.0f, -1000.0f);
 
